@@ -1,0 +1,1 @@
+Success! You can start editing Markdown files in the ``content/`` folder.
