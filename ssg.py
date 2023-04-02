@@ -15,9 +15,11 @@ if not os.path.exists('layout'):
     os.mkdir('layout')
 
     top = open('layout/top.html', 'w')
+    top.write("<html><head><title>SSG</title></head><body><header><h1>Your Website</h1></header><main>")
     top.close()
 
     bottom = open('layout/bottom.html', 'w')
+    bottom.write("</main><footer><p>Created with SSG</p></footer></body>")
     bottom.close()
     print("Created layout folder, and empty files")
 
@@ -27,9 +29,12 @@ if not os.path.exists('static'):
 
 if not os.path.exists('content'):
     os.mkdir('content')
+    home_page = open('content/index.md', 'w')
+    home_page.write('# Home\nYour website has been created! Edit the layout in ``layout/``, and edit the content in ``content/``.')
+    home_page.close()
     print("Created content folder")
 
-
+# Copy all static files to the output folder
 shutil.copytree('static', 'output')
 
 # Get top & bottom file contents
