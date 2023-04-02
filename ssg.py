@@ -1,6 +1,7 @@
 import os
 import shutil
 import markdown
+from bs4 import BeautifulSoup
 
 version = "1.0"
 
@@ -27,10 +28,17 @@ if not os.path.exists('static'):
     os.mkdir('static')
     print("Created static folder")
 
+if not os.path.exists('components'):
+    os.mkdir('components')
+    example_component = open('components/example.html', 'w')
+    example_component.write('<script>fetch("https://jsonplaceholder.typicode.com/posts").then(data => data.json()).then((data) => {document.getElementById(\'example\').innerHTML = "data[0]\'s title: " +data[0].title;})</script>')
+    example_component.close()
+    print("Created components folder")
+
 if not os.path.exists('content'):
     os.mkdir('content')
     home_page = open('content/index.md', 'w')
-    home_page.write('# Home\nYour website has been created! Edit the layout in ``layout/``, and edit the content in ``content/``.')
+    home_page.write('# Home\nYour website has been created! Edit the layout in ``layout/``, and edit the content in ``content/``.\n<component id="example"></component>')
     home_page.close()
     print("Created content folder")
 
@@ -75,6 +83,52 @@ for root, dirs, files in os.walk('content'):
         output_file.close()
 
         print(full_file_path + " as " + output_path)
+
+print("---")
+
+# Loop through every file/folder inside of the output directory
+for root, dirs, files in os.walk('output'):
+    path = root.split(os.sep)
+    for file in files:
+        filename = os.fsdecode(file)
+        full_file_path = os.path.join(root, filename)
+
+        if filename.endswith(".html"):
+            output_path = full_file_path.replace('.md', '.html').replace('.markdown', '.html').replace('content/', 'output/')
+
+            # Get the current file
+            reading_file = open(output_path, "r")
+            reading_file_content = reading_file.read()
+            reading_file.close()
+
+            soup = BeautifulSoup(reading_file_content, features="html.parser")
+
+            # Loop through every <component> tag, and append the content
+            for tag in soup.find_all("component"):
+                if tag.attrs['id'] != None:
+                    tag_id = tag.attrs['id']
+
+                    component_path = "components/" + tag_id + ".html"
+
+                    if os.path.exists(component_path):
+                        component_file = open(component_path, 'r')
+                        component_content = component_file.read()
+                        component_file.close()
+
+                        new_tag = soup.new_tag(component_content)
+                        tag.append(new_tag)
+                        print("Found component: " + tag_id)
+                    else:
+                        tag.string ="A component named " + tag_id + " doesn't exist!"
+
+                else:
+                    tag.string ="You didn't set an id on this component!"
+            
+            output = soup.prettify()
+
+            output_file = open(output_path, "w+")
+            output_file.write(output)
+            output_file.close()
 
 print("---")
 print("Everything should be finished now. Enjoy your website!")
