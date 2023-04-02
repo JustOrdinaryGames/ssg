@@ -3,11 +3,10 @@ A simple static-site generator written in Python.
 ## Compatibility
 > This software supports both Linux (tested on Debian), and MacOS (tested on 2020 M1 Mac Mini)
 ## Usage
-- Clone (or fork) this repository.
-- Make sure you have Python 3+ installed.
-- Run ``python3 -m pip install markdown``
-- Edit the templates in ``layout/``, and the pages in ``content/`` - Markdown & HTML content are both supported.
-- When you're happy with what you've done, run ``python3 ssg.py`` to generate your site. The files will show up in ``output/``
-- If you want to edit the appearance of your website, edit ``static/style.css`` with your own custom CSS.
-## Hosting
-If you'd like to deploy your site automatically, check out ``ci/github.yml`` for a GitHub Actions workflow. This automatically logs into your server, and uploads your site to a specified path. You have to do some more configuration on your server - [here](https://youtu.be/ATenAnk8eX4)'s a helpful video on how.
+Note: This requires basic knowledge of HTML, and CSS in order to use successfully.
+- Click [here](https://raw.githubusercontent.com/sbstnlol/ssg/master/ssg.py), and copy everything on screen into a new ``.py`` file on your computer.
+- Move the ``.py`` file into an empty directory.
+- Install the Markdown library with ``python3 -m pip install markdown``
+- Generate the required filestructure with ``python3 ssg.py``
+- Edit ``layout/top.html`` & ``layout/bottom.html`` as needed, and create either ``.md`` or ``.html`` files in ``content/``
+- When you're happy with what you've created, run ``python3 ssg.py`` again to generate your site. The files will appear in ``output/``
