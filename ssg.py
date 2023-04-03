@@ -59,11 +59,11 @@ for root, dirs, files in os.walk('content'):
         filename = os.fsdecode(file)
 
         full_file_path = os.path.join(root, filename)
-        output_path = full_file_path.replace('.md', '.html').replace('.markdown', '.html').replace('content/', 'output/')
+        output_path = full_file_path.replace('.md', '.html').replace('.markdown', '.html').replace('content/', 'output/').replace('content\\', 'output\\')
 
         # Create required directories for output file (ex: content/posts/test-post.md would need to create output/posts directory)
         if not os.path.exists(output_path):
-            os.makedirs(output_path.replace('/' + file.replace('.md', '.html').replace('.markdown', '.html'), ''), exist_ok=True)
+            os.makedirs(output_path.replace('/' + file.replace('.md', '.html').replace('.markdown', '.html'), '').replace('\\' + file.replace('.md', '.html').replace('.markdown', '.html'), ''), exist_ok=True)
         
         # Get the current file, located in content/
         reading_file = open(full_file_path, "r")
